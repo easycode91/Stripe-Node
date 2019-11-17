@@ -8,22 +8,21 @@ router.get('',(req,res)=>{
 })
 
 router.post('/checkout', async (req, res) => {
-res.send('Received');
    const customer = await stripe.customers.create({
-        email : req.body.stripeEmail
+        email : req.body.stripeEmail,
+        source : req.body.stripeToken
     })
-
-    const token = req.body.stripeToken;
-
-    const charges = await stripe.chargers.create({
+    const charges = await stripe.charges.create({
         amount : 3000,
         currency : 'usd',
-        description : 'Example pay with stripe',
-        source : token,
+        description : 'video editing',
         customer : customer.id
     })
 
-    console.log(req.body);
+     res.json({
+         message : 'Received',
+         data : charges
+     });
         
 });
 
